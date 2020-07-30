@@ -1,8 +1,10 @@
 use crate::{
 	event::Command,
 	manager::PlaySoundSettings,
-	sound_bank::{SoundBank, SoundId},
+	sound::Sound,
+	sound_bank::{SoundBank, SoundId, TagId},
 	stereo_sample::StereoSample,
+	tag::Tag,
 };
 use ringbuf::Consumer;
 
@@ -25,10 +27,33 @@ impl Backend {
 		}
 	}
 
+	fn get_tag(&self, tag_id: TagId) -> &Tag {
+		&self.sound_bank.tags[tag_id.index]
+	}
+
+	fn get_tag_mut(&mut self, tag_id: TagId) -> &mut Tag {
+		&mut self.sound_bank.tags[tag_id.index]
+	}
+
+	fn get_sound(&self, sound_id: SoundId) -> &Sound {
+		&self.sound_bank.sounds[sound_id.index]
+	}
+
+	fn get_sound_mut(&mut self, sound_id: SoundId) -> &mut Sound {
+		&mut self.sound_bank.sounds[sound_id.index]
+	}
+
+	fn get_sound_volume(&self, sound_id: SoundId) -> f32 {
+		let mut volume = 1.0;
+		let sound = self.get_sound(sound_id);
+		for tag_id in &sound.tags {
+			volume *= self.get_tag(*tag_id).volume;
+		}
+		volume
+	}
+
 	fn play_sound(&mut self, sound_id: SoundId, settings: PlaySoundSettings) {
-		let index = sound_id.index;
-		let sound = &mut self.sound_bank.sounds[index];
-		sound.play(settings);
+		self.get_sound_mut(sound_id).play(settings);
 	}
 
 	pub fn process(&mut self) -> StereoSample {
@@ -40,8 +65,12 @@ impl Backend {
 			}
 		}
 		let mut out = StereoSample::from_mono(0.0);
-		for sound in &mut self.sound_bank.sounds {
-			out += sound.process(self.dt);
+		let dt = self.dt;
+		for i in 0..self.sound_bank.sounds.len() {
+			let id = SoundId { index: i };
+			let volume = self.get_sound_volume(id);
+			let sound = self.get_sound_mut(id);
+			out += sound.process(dt) * volume;
 		}
 		out
 	}

@@ -1,14 +1,25 @@
 mod instance;
 
-use crate::{manager::PlaySoundSettings, stereo_sample::StereoSample};
+use crate::{manager::PlaySoundSettings, sound_bank::TagId, stereo_sample::StereoSample};
 use instance::{Instance, InstanceState};
 use lewton::{inside_ogg::OggStreamReader, samples::Samples};
 use std::{error::Error, fs::File, path::Path};
 
 const NUM_INSTANCES: usize = 8;
 
-pub struct Sound {
+pub struct SoundSettings {
+	pub tags: Vec<TagId>,
+}
+
+impl Default for SoundSettings {
+	fn default() -> Self {
+		Self { tags: vec![] }
+	}
+}
+
+pub(crate) struct Sound {
 	sample_rate: u32,
+	pub tags: Vec<TagId>,
 	pub samples: Vec<StereoSample>,
 	pub instances: Vec<Instance>,
 }
@@ -45,7 +56,7 @@ fn get_interpolated_sample(
 }
 
 impl Sound {
-	pub fn new(sample_rate: u32, samples: Vec<StereoSample>) -> Self {
+	pub fn new(sample_rate: u32, samples: Vec<StereoSample>, settings: SoundSettings) -> Self {
 		let duration = samples.len() as f32 / sample_rate as f32;
 		let mut instances = vec![];
 		for _ in 0..NUM_INSTANCES {
@@ -53,12 +64,13 @@ impl Sound {
 		}
 		Self {
 			sample_rate,
+			tags: settings.tags,
 			samples,
 			instances,
 		}
 	}
 
-	pub fn from_ogg_file(path: &Path) -> Result<Self, Box<dyn Error>> {
+	pub fn from_ogg_file(path: &Path, settings: SoundSettings) -> Result<Self, Box<dyn Error>> {
 		let mut reader = OggStreamReader::new(File::open(path)?)?;
 		let mut samples = vec![];
 		while let Some(packet) = reader.read_dec_packet_generic::<Vec<Vec<f32>>>()? {
@@ -80,7 +92,11 @@ impl Sound {
 				}
 			}
 		}
-		Ok(Self::new(reader.ident_hdr.audio_sample_rate, samples))
+		Ok(Self::new(
+			reader.ident_hdr.audio_sample_rate,
+			samples,
+			settings,
+		))
 	}
 
 	fn pick_instance_to_play(&self) -> Option<usize> {

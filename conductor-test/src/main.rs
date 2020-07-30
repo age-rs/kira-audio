@@ -1,6 +1,8 @@
 use conductor::{
 	manager::{AudioManager, PlaySoundSettings},
+	sound::SoundSettings,
 	sound_bank::{SoundBank, SoundId},
+	tag::Tag,
 };
 use ggez::{
 	event::{KeyCode, KeyMods},
@@ -17,8 +19,14 @@ pub struct MainState {
 impl MainState {
 	pub fn new() -> Result<Self, Box<dyn Error>> {
 		let mut sound_bank = SoundBank::new();
-		let sound_id =
-			sound_bank.load(&std::env::current_dir().unwrap().join("assets/cymbal.ogg"))?;
+		let test_tag = sound_bank.add_tag(Tag { volume: 0.5 });
+		let sound_id = sound_bank.load(
+			&std::env::current_dir().unwrap().join("assets/cymbal.ogg"),
+			SoundSettings {
+				tags: vec![test_tag],
+				..Default::default()
+			},
+		)?;
 		Ok(Self {
 			sound_id,
 			audio_manager: AudioManager::new(sound_bank)?,
@@ -39,14 +47,9 @@ impl ggez::event::EventHandler for MainState {
 		_repeat: bool,
 	) {
 		match keycode {
-			KeyCode::Space => self.audio_manager.play_sound(
-				self.sound_id,
-				PlaySoundSettings {
-					pitch: rand::thread_rng().gen_range(0.5, 1.5),
-					volume: rand::thread_rng().gen_range(0.1, 1.0),
-					..Default::default()
-				},
-			),
+			KeyCode::Space => self
+				.audio_manager
+				.play_sound(self.sound_id, PlaySoundSettings::default()),
 			_ => {}
 		}
 	}
