@@ -11,10 +11,10 @@ use crate::{
 };
 use indexmap::IndexMap;
 use instances::Instances;
-use ringbuf::{Consumer, Producer};
+use ringbuf::{Consumer, Producer, RingBuffer};
 use sequences::Sequences;
 
-pub(crate) struct Backend<CustomEvent: Send + 'static> {
+pub struct Backend<CustomEvent: Send + 'static> {
 	dt: f64,
 	sounds: IndexMap<SoundId, Sound>,
 	command_queue: Vec<Command<CustomEvent>>,
@@ -50,7 +50,42 @@ impl<CustomEvent: Copy + Send + 'static> Backend<CustomEvent> {
 		}
 	}
 
-	fn process_commands(&mut self) {
+	pub fn standalone(
+		sample_rate: u32,
+		settings: AudioManagerSettings,
+	) -> (
+		Backend<CustomEvent>,
+		Producer<Command<CustomEvent>>,
+		Consumer<Event<CustomEvent>>,
+		Consumer<Sound>,
+		Consumer<Sequence<CustomEvent>>,
+	) {
+		let (command_producer, command_consumer) =
+			RingBuffer::<Command<CustomEvent>>::new(settings.num_commands).split();
+		let (event_producer, event_consumer) =
+			RingBuffer::<Event<CustomEvent>>::new(settings.num_events).split();
+		let (sounds_to_unload_producer, sounds_to_unload_consumer) =
+			RingBuffer::<Sound>::new(settings.num_sounds).split();
+		let (sequences_to_unload_producer, sequences_to_unload_consumer) =
+			RingBuffer::<Sequence<CustomEvent>>::new(settings.num_sequences).split();
+		let backend = Self::new(
+			sample_rate,
+			settings,
+			command_consumer,
+			event_producer,
+			sounds_to_unload_producer,
+			sequences_to_unload_producer,
+		);
+		(
+			backend,
+			command_producer,
+			event_consumer,
+			sounds_to_unload_consumer,
+			sequences_to_unload_consumer,
+		)
+	}
+
+	pub fn process_commands(&mut self) {
 		while let Some(command) = self.command_consumer.pop() {
 			self.command_queue.push(command);
 		}
@@ -91,7 +126,7 @@ impl<CustomEvent: Copy + Send + 'static> Backend<CustomEvent> {
 		}
 	}
 
-	fn update_metronome(&mut self) {
+	pub fn update_metronome(&mut self) {
 		for interval in self.metronome.update(self.dt) {
 			match self
 				.event_producer
@@ -103,7 +138,7 @@ impl<CustomEvent: Copy + Send + 'static> Backend<CustomEvent> {
 		}
 	}
 
-	fn update_sequences(&mut self) {
+	pub fn update_sequences(&mut self) {
 		for command in self.sequences.update(
 			self.dt,
 			&self.metronome,
@@ -113,10 +148,14 @@ impl<CustomEvent: Copy + Send + 'static> Backend<CustomEvent> {
 		}
 	}
 
+	pub fn process_instances(&mut self) -> StereoSample {
+		self.instances.process(self.dt, &self.sounds)
+	}
+
 	pub fn process(&mut self) -> StereoSample {
 		self.process_commands();
 		self.update_metronome();
 		self.update_sequences();
-		self.instances.process(self.dt, &self.sounds)
+		self.process_instances()
 	}
 }

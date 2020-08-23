@@ -6,13 +6,13 @@ use crate::{
 	tween::Tween,
 };
 
-pub(crate) enum SoundCommand {
+pub enum SoundCommand {
 	LoadSound(SoundId, Sound),
 	UnloadSound(SoundId),
 }
 
 #[derive(Debug, Copy, Clone)]
-pub(crate) enum InstanceCommand<Id> {
+pub enum InstanceCommand<Id> {
 	PlaySound(SoundId, Id, InstanceSettings),
 	SetInstanceVolume(Id, f64, Option<Tween>),
 	SetInstancePitch(Id, f64, Option<Tween>),
@@ -25,20 +25,20 @@ pub(crate) enum InstanceCommand<Id> {
 }
 
 #[derive(Debug, Copy, Clone)]
-pub(crate) enum MetronomeCommand {
+pub enum MetronomeCommand {
 	SetMetronomeTempo(Tempo),
 	StartMetronome,
 	PauseMetronome,
 	StopMetronome,
 }
 
-pub(crate) enum SequenceCommand<CustomEvent> {
+pub enum SequenceCommand<CustomEvent> {
 	StartSequence(SequenceId, Sequence<CustomEvent>),
 	MuteSequence(SequenceId),
 	UnmuteSequence(SequenceId),
 }
 
-pub(crate) enum Command<CustomEvent> {
+pub enum Command<CustomEvent> {
 	Sound(SoundCommand),
 	Instance(InstanceCommand<InstanceId>),
 	Metronome(MetronomeCommand),

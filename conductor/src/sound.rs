@@ -55,7 +55,7 @@ impl Hash for SoundId {
 }
 
 impl SoundId {
-	pub(crate) fn new(duration: f64, metadata: SoundMetadata) -> Self {
+	pub fn new(duration: f64, metadata: SoundMetadata) -> Self {
 		let index = NEXT_SOUND_INDEX.fetch_add(1, Ordering::Relaxed);
 		Self {
 			index,
@@ -66,7 +66,7 @@ impl SoundId {
 }
 
 #[derive(Debug)]
-pub(crate) struct Sound {
+pub struct Sound {
 	sample_rate: u32,
 	samples: Vec<StereoSample>,
 	duration: f64,

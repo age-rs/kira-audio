@@ -1,3 +1,7 @@
+mod backend;
+
+pub use backend::Backend;
+
 use crate::{
 	command::{Command, InstanceCommand, MetronomeCommand, SequenceCommand, SoundCommand},
 	error::ConductorError,
@@ -8,12 +12,9 @@ use crate::{
 	tempo::Tempo,
 	tween::Tween,
 };
-use backend::Backend;
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use ringbuf::{Consumer, Producer, RingBuffer};
 use std::{error::Error, path::Path};
-
-mod backend;
 
 /// Events that can be sent by the audio thread.
 #[derive(Debug, Copy, Clone)]

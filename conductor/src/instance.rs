@@ -23,7 +23,7 @@ pub struct InstanceId {
 }
 
 impl InstanceId {
-	pub(crate) fn new() -> Self {
+	pub fn new() -> Self {
 		let index = NEXT_INSTANCE_INDEX.fetch_add(1, Ordering::Relaxed);
 		Self { index }
 	}
