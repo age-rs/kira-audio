@@ -32,13 +32,13 @@ pub(crate) enum MetronomeCommand {
 	StopMetronome,
 }
 
-pub(crate) enum SequenceCommand<CustomEvent> {
+pub(crate) enum SequenceCommand<CustomEvent: Clone> {
 	StartSequence(SequenceId, Sequence<CustomEvent>),
 	MuteSequence(SequenceId),
 	UnmuteSequence(SequenceId),
 }
 
-pub(crate) enum Command<CustomEvent> {
+pub(crate) enum Command<CustomEvent: Clone> {
 	Sound(SoundCommand),
 	Instance(InstanceCommand<InstanceId>),
 	Metronome(MetronomeCommand),

@@ -7,13 +7,13 @@ use indexmap::IndexMap;
 use ringbuf::Producer;
 use std::vec::Drain;
 
-pub(crate) struct Sequences<CustomEvent> {
+pub(crate) struct Sequences<CustomEvent: Clone> {
 	sequences: IndexMap<SequenceId, Sequence<CustomEvent>>,
 	sequences_to_remove: Vec<SequenceId>,
 	output_command_queue: Vec<SequenceOutputCommand<CustomEvent>>,
 }
 
-impl<CustomEvent: Copy> Sequences<CustomEvent> {
+impl<CustomEvent: Clone> Sequences<CustomEvent> {
 	pub fn new(sequence_capacity: usize, command_capacity: usize) -> Self {
 		Self {
 			sequences: IndexMap::with_capacity(sequence_capacity),

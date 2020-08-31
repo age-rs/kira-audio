@@ -72,7 +72,7 @@ Plays and manages audio.
 The `AudioManager` is responsible for all communication between the gameplay thread
 and the audio thread.
 */
-pub struct AudioManager<CustomEvent: Send + 'static = ()> {
+pub struct AudioManager<CustomEvent: Clone + Send + 'static = ()> {
 	quit_signal_producer: Producer<bool>,
 	command_producer: Producer<Command<CustomEvent>>,
 	event_consumer: Consumer<Event<CustomEvent>>,
@@ -80,7 +80,7 @@ pub struct AudioManager<CustomEvent: Send + 'static = ()> {
 	sequences_to_unload_consumer: Consumer<Sequence<CustomEvent>>,
 }
 
-impl<CustomEvent: Copy + Send + 'static> AudioManager<CustomEvent> {
+impl<CustomEvent: Clone + Send + 'static> AudioManager<CustomEvent> {
 	/// Creates a new audio manager and starts an audio thread.
 	pub fn new(settings: AudioManagerSettings) -> Result<Self, Box<dyn Error>> {
 		let (quit_signal_producer, mut quit_signal_consumer) = RingBuffer::new(1).split();
@@ -437,7 +437,7 @@ impl<CustomEvent: Copy + Send + 'static> AudioManager<CustomEvent> {
 	}
 }
 
-impl<CustomEvent: Send + 'static> Drop for AudioManager<CustomEvent> {
+impl<CustomEvent: Clone + Send + 'static> Drop for AudioManager<CustomEvent> {
 	fn drop(&mut self) {
 		self.quit_signal_producer.push(true).unwrap();
 	}

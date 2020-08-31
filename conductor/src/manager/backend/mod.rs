@@ -14,7 +14,7 @@ use instances::Instances;
 use ringbuf::{Consumer, Producer};
 use sequences::Sequences;
 
-pub(crate) struct Backend<CustomEvent: Send + 'static> {
+pub(crate) struct Backend<CustomEvent: Clone + Send + 'static> {
 	dt: f64,
 	sounds: IndexMap<SoundId, Sound>,
 	command_queue: Vec<Command<CustomEvent>>,
@@ -27,7 +27,7 @@ pub(crate) struct Backend<CustomEvent: Send + 'static> {
 	sequences: Sequences<CustomEvent>,
 }
 
-impl<CustomEvent: Copy + Send + 'static> Backend<CustomEvent> {
+impl<CustomEvent: Clone + Send + 'static> Backend<CustomEvent> {
 	pub fn new(
 		sample_rate: u32,
 		settings: AudioManagerSettings,

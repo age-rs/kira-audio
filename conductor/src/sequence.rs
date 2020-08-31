@@ -47,7 +47,7 @@ impl SequenceId {
 	}
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone)]
 enum SequenceCommand<CustomEvent> {
 	Instance(InstanceCommand<SequenceInstanceHandle>),
 	Metronome(MetronomeCommand),
@@ -60,7 +60,7 @@ pub(crate) enum SequenceOutputCommand<CustomEvent> {
 	EmitCustomEvent(CustomEvent),
 }
 
-impl<CustomEvent> Into<Command<CustomEvent>> for SequenceOutputCommand<CustomEvent> {
+impl<CustomEvent: Clone> Into<Command<CustomEvent>> for SequenceOutputCommand<CustomEvent> {
 	fn into(self) -> Command<CustomEvent> {
 		match self {
 			SequenceOutputCommand::Instance(command) => Command::Instance(command),
@@ -70,7 +70,7 @@ impl<CustomEvent> Into<Command<CustomEvent>> for SequenceOutputCommand<CustomEve
 	}
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone)]
 enum SequenceTask<CustomEvent> {
 	Wait(Duration),
 	WaitForInterval(f64),
@@ -86,7 +86,7 @@ enum SequenceState {
 }
 
 #[derive(Debug, Clone)]
-pub struct Sequence<CustomEvent> {
+pub struct Sequence<CustomEvent: Clone> {
 	tasks: Vec<SequenceTask<CustomEvent>>,
 	state: SequenceState,
 	wait_timer: Option<f64>,
@@ -94,7 +94,7 @@ pub struct Sequence<CustomEvent> {
 	muted: bool,
 }
 
-impl<CustomEvent: Copy> Sequence<CustomEvent> {
+impl<CustomEvent: Clone> Sequence<CustomEvent> {
 	pub fn new() -> Self {
 		Self {
 			tasks: vec![],
@@ -332,7 +332,7 @@ impl<CustomEvent: Copy> Sequence<CustomEvent> {
 	) {
 		while let SequenceState::Playing(index) = self.state {
 			if let Some(task) = self.tasks.get(index) {
-				let task = *task;
+				let task = task.clone();
 				match task {
 					SequenceTask::Wait(duration) => {
 						if let Some(time) = self.wait_timer.as_mut() {
