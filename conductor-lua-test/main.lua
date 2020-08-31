@@ -14,11 +14,11 @@ local hatSoundId = manager:loadSound('assets/hhclosed.ogg', {
 		tempo = 120,
 	}
 })
-print(hatSoundId:getMetadata():getTempo())
 local hatSequence = conductor.newSequence()
 hatSequence:playSound(hatSoundId)
 hatSequence:playSound(hatSoundId, {pitch = 0.25})
 hatSequence:wait(1, 'beats')
+hatSequence:emitCustomEvent 'hat!'
 hatSequence:goTo(1)
 manager:startSequence(hatSequence)
 manager:startMetronome()
@@ -27,8 +27,8 @@ local callbacks = {
 	metronomeIntervalPassed = function(interval)
 		print('interval passed:', interval)
 	end,
-	custom = function(index)
-		print('custom event emitted:', index)
+	custom = function(name)
+		print('custom event emitted:', name)
 	end,
 }
 

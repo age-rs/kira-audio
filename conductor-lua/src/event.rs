@@ -1,7 +1,7 @@
 use conductor::manager::Event;
 use mlua::prelude::*;
 
-pub struct LEvent(pub Event<usize>);
+pub struct LEvent(pub Event<String>);
 
 impl<'lua> ToLua<'lua> for LEvent {
 	fn to_lua(self, lua: &'lua Lua) -> LuaResult<LuaValue<'lua>> {
@@ -12,10 +12,10 @@ impl<'lua> ToLua<'lua> for LEvent {
 				table.set("interval", interval)?;
 				Ok(LuaValue::Table(table))
 			}
-			Event::Custom(index) => {
+			Event::Custom(name) => {
 				let table = lua.create_table()?;
 				table.set("kind", "custom")?;
-				table.set("index", index)?;
+				table.set("name", name)?;
 				Ok(LuaValue::Table(table))
 			}
 		}
