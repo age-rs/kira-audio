@@ -3,3 +3,6 @@ members = [
 	"conductor",
 	"conductor-test"
 ]
+
+[profile.dev]
+opt-level = 3
