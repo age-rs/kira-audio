@@ -1,10 +1,9 @@
-use std::f32::consts::PI;
+mod backend;
 
-use cpal::{
-	traits::{DeviceTrait, HostTrait, StreamTrait},
-	Sample,
-};
+use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use ringbuf::{Producer, RingBuffer};
+
+use self::backend::Backend;
 
 pub struct AudioManager {
 	exit_message_producer: Producer<bool>,
@@ -22,19 +21,20 @@ impl AudioManager {
 				.unwrap()
 				.with_max_sample_rate()
 				.config();
-			let sample_rate = config.sample_rate;
+			let sample_rate = config.sample_rate.0;
 			let channels = config.channels;
-			let mut phase = 0.0;
+			if channels != 2 {
+				panic!("Only stereo audio is supported");
+			}
+			let mut backend = Backend::new(sample_rate);
 			let stream = device
 				.build_output_stream(
 					&config,
 					move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
 						for frame in data.chunks_mut(channels as usize) {
-							phase += 440.0 / (sample_rate.0 as f32);
-							let out = 0.5 * (phase * 2.0 * PI).sin();
-							for sample in frame {
-								*sample = Sample::from(&out);
-							}
+							let out = backend.process();
+							frame[0] = out.left;
+							frame[1] = out.right;
 						}
 					},
 					|_| {},
