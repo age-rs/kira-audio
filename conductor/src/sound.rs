@@ -1,9 +1,14 @@
-use std::{error::Error, fs::File, path::Path};
+use std::{fs::File, path::Path};
 
+use generational_arena::Index;
 use lewton::{inside_ogg::OggStreamReader, samples::Samples};
 
 use crate::{error::ConductorError, error::ConductorResult, frame::Frame};
 
+#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+pub struct SoundId(pub(crate) Index);
+
+#[derive(Debug)]
 pub struct Sound {
 	sample_rate: u32,
 	frames: Vec<Frame>,

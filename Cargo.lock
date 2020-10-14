@@ -95,6 +95,7 @@ name = "conductor"
 version = "0.1.0"
 dependencies = [
  "cpal 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "generational-arena 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "lewton 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "ringbuf 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -146,6 +147,14 @@ dependencies = [
  "thiserror 1.0.21 (registry+https://github.com/rust-lang/crates.io-index)",
  "web-sys 0.3.45 (registry+https://github.com/rust-lang/crates.io-index)",
  "winapi 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "generational-arena"
+version = "0.2.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -521,6 +530,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum coreaudio-rs 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f229761965dad3e9b11081668a6ea00f1def7aa46062321b5ec245b834f6e491"
 "checksum coreaudio-sys 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)" = "d6570ee6e089131e928d5ec9236db9e818aa3cf850f48b0eec6ef700571271d4"
 "checksum cpal 0.12.1 (registry+https://github.com/rust-lang/crates.io-index)" = "be4410231e181e24e3e4612dfca601601e40942003e6a52a12d9d80f19fd9737"
+"checksum generational-arena 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)" = "8e1d3b771574f62d0548cee0ad9057857e9fc25d7a3335f140c84f6acd0bf601"
 "checksum glob 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9b919933a397b79c37e33b77bb2aa3dc8eb6e165ad809e58ff75bc7db2e34574"
 "checksum js-sys 0.3.45 (registry+https://github.com/rust-lang/crates.io-index)" = "ca059e81d9486668f12d455a4ea6daa600bd408134cd17e3d3fb5a32d1f016f8"
 "checksum lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"

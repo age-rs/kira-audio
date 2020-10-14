@@ -1,12 +1,18 @@
-use std::io::stdin;
-
-use conductor::{manager::AudioManager, sound::Sound};
+use conductor::{manager::AudioManager, manager::AudioManagerSettings, sound::Sound};
 
 fn main() {
-	let sound = Sound::from_ogg_file(
-		std::env::current_dir()
-			.unwrap()
-			.join("assets/test_song.ogg"),
-	)
-	.unwrap();
+	let mut manager = AudioManager::new(AudioManagerSettings::default());
+	for _ in 0..2 {
+		println!(
+			"{:?}",
+			manager.add_sound(
+				Sound::from_ogg_file(
+					std::env::current_dir()
+						.unwrap()
+						.join("assets/test_song.ogg"),
+				)
+				.unwrap()
+			)
+		);
+	}
 }

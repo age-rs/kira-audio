@@ -1,17 +1,34 @@
 mod backend;
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-use ringbuf::{Producer, RingBuffer};
+use ringbuf::{Consumer, Producer, RingBuffer};
+
+use crate::sound::{Sound, SoundId};
 
 use self::backend::Backend;
 
+#[derive(Debug, Clone)]
+pub struct AudioManagerSettings {
+	pub max_sounds: usize,
+}
+
+impl Default for AudioManagerSettings {
+	fn default() -> Self {
+		Self { max_sounds: 100 }
+	}
+}
+
 pub struct AudioManager {
 	exit_message_producer: Producer<bool>,
+	add_sound_producer: Producer<Sound>,
+	add_sound_result_consumer: Consumer<Result<SoundId, Sound>>,
 }
 
 impl AudioManager {
-	pub fn new() -> Self {
+	pub fn new(settings: AudioManagerSettings) -> Self {
 		let (exit_message_producer, mut exit_message_consumer) = RingBuffer::new(1).split();
+		let (add_sound_producer, mut add_sound_consumer) = RingBuffer::new(1).split();
+		let (add_sound_result_producer, mut add_sound_result_consumer) = RingBuffer::new(1).split();
 		std::thread::spawn(move || {
 			let host = cpal::default_host();
 			let device = host.default_output_device().unwrap();
@@ -26,7 +43,12 @@ impl AudioManager {
 			if channels != 2 {
 				panic!("Only stereo audio is supported");
 			}
-			let mut backend = Backend::new(sample_rate);
+			let mut backend = Backend::new(
+				sample_rate,
+				&settings,
+				add_sound_consumer,
+				add_sound_result_producer,
+			);
 			let stream = device
 				.build_output_stream(
 					&config,
@@ -49,6 +71,19 @@ impl AudioManager {
 		});
 		Self {
 			exit_message_producer,
+			add_sound_producer,
+			add_sound_result_consumer,
+		}
+	}
+}
+
+impl AudioManager {
+	pub fn add_sound(&mut self, sound: Sound) -> Result<SoundId, Sound> {
+		self.add_sound_producer.push(sound).unwrap();
+		loop {
+			if let Some(result) = self.add_sound_result_consumer.pop() {
+				return result;
+			}
 		}
 	}
 }
