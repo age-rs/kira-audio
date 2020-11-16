@@ -542,7 +542,7 @@
 <span class="doccomment">//! # let sound_id = audio_manager.add_sound(Sound::from_file(&quot;loop.ogg&quot;, Default::default())?)?;</span>
 <span class="doccomment">//! let mut sequence = Sequence::new();</span>
 <span class="doccomment">//! // play a sound</span>
-<span class="doccomment">//! let instance_id = sequence.play_sound(sound_id, Default::default());</span>
+<span class="doccomment">//! let instance_id = sequence.play_sound(sound_id, InstanceSettings::default());</span>
 <span class="doccomment">//! // wait 2 seconds</span>
 <span class="doccomment">//! sequence.wait(Duration::Seconds(2.0));</span>
 <span class="doccomment">//! // stop the sound</span>
@@ -589,7 +589,7 @@
 <span class="doccomment">//! # let sound_id = audio_manager.add_sound(Sound::from_file(&quot;loop.ogg&quot;, Default::default())?)?;</span>
 <span class="doccomment">//! # let mut sequence = Sequence::new();</span>
 <span class="doccomment">//! sequence.wait_for_interval(4.0);</span>
-<span class="doccomment">//! sequence.play_sound(sound_id, Default::default());</span>
+<span class="doccomment">//! sequence.play_sound(sound_id, InstanceSettings::default());</span>
 <span class="doccomment">//! # audio_manager.start_sequence(sequence)?;</span>
 <span class="doccomment">//! # Ok::&lt;(), kira::KiraError&gt;(())</span>
 <span class="doccomment">//! ```</span>
@@ -616,7 +616,7 @@
 <span class="doccomment">//! sequence.wait_for_interval(4.0);</span>
 <span class="doccomment">//! sequence.start_loop();</span>
 <span class="doccomment">//! // when the sequence finishes, it will loop back to this step</span>
-<span class="doccomment">//! sequence.play_sound(sound_id, Default::default());</span>
+<span class="doccomment">//! sequence.play_sound(sound_id, InstanceSettings::default());</span>
 <span class="doccomment">//! sequence.wait(Duration::Beats(1.0));</span>
 <span class="doccomment">//! # audio_manager.start_sequence(sequence)?;</span>
 <span class="doccomment">//! # Ok::&lt;(), kira::KiraError&gt;(())</span>

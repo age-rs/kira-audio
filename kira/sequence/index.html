@@ -6,7 +6,7 @@ the actions you want to take in order:</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sequence</span> <span class="op">=</span> <span class="ident">Sequence</span>::<span class="ident">new</span>();
 <span class="comment">// play a sound</span>
-<span class="kw">let</span> <span class="ident">instance_id</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">Default</span>::<span class="ident">default</span>());
+<span class="kw">let</span> <span class="ident">instance_id</span> <span class="op">=</span> <span class="ident">sequence</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">InstanceSettings</span>::<span class="ident">default</span>());
 <span class="comment">// wait 2 seconds</span>
 <span class="ident">sequence</span>.<span class="ident">wait</span>(<span class="ident">Duration</span>::<span class="ident">Seconds</span>(<span class="number">2.0</span>));
 <span class="comment">// stop the sound</span>
@@ -26,7 +26,7 @@ the actions you want to take in order:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="ident">sequence</span>.<span class="ident">wait_for_interval</span>(<span class="number">4.0</span>);
-<span class="ident">sequence</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">Default</span>::<span class="ident">default</span>());</pre></div>
+<span class="ident">sequence</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">InstanceSettings</span>::<span class="ident">default</span>());</pre></div>
 <p>Note that the metronome has to be running for the interval to work.</p>
 <h2 id="looping-sequences" class="section-header"><a href="#looping-sequences">Looping sequences</a></h2>
 <p>You can create looping sequences by setting the loop start point. The
@@ -37,7 +37,7 @@ play a sound every beat:</p>
 <span class="ident">sequence</span>.<span class="ident">wait_for_interval</span>(<span class="number">4.0</span>);
 <span class="ident">sequence</span>.<span class="ident">start_loop</span>();
 <span class="comment">// when the sequence finishes, it will loop back to this step</span>
-<span class="ident">sequence</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">Default</span>::<span class="ident">default</span>());
+<span class="ident">sequence</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">InstanceSettings</span>::<span class="ident">default</span>());
 <span class="ident">sequence</span>.<span class="ident">wait</span>(<span class="ident">Duration</span>::<span class="ident">Beats</span>(<span class="number">1.0</span>));</pre></div>
 <h2 id="custom-events" class="section-header"><a href="#custom-events">Custom events</a></h2>
 <p>Sequences can emit custom events that you can receive on the main

@@ -135,9 +135,9 @@
 <span class="doccomment">//! To use Kira, first create an `AudioManager`:</span>
 <span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # use std::error::Error;</span>
-<span class="doccomment">//! # use kira::manager::AudioManager;</span>
+<span class="doccomment">//! # use kira::manager::{AudioManager, AudioManagerSettings};</span>
 <span class="doccomment">//! #</span>
-<span class="doccomment">//! let mut audio_manager = AudioManager::&lt;()&gt;::new(Default::default())?;</span>
+<span class="doccomment">//! let mut audio_manager = AudioManager::&lt;()&gt;::new(AudioManagerSettings::default())?;</span>
 <span class="doccomment">//! # Ok::&lt;(), kira::KiraError&gt;(())</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
@@ -147,11 +147,11 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```no_run</span>
 <span class="doccomment">//! # use std::error::Error;</span>
-<span class="doccomment">//! # use kira::{manager::AudioManager, sound::Sound};</span>
+<span class="doccomment">//! # use kira::{manager::{AudioManager, AudioManagerSettings}, sound::{Sound, SoundSettings}, instance::InstanceSettings};</span>
 <span class="doccomment">//! #</span>
-<span class="doccomment">//! # let mut audio_manager = AudioManager::&lt;()&gt;::new(Default::default())?;</span>
-<span class="doccomment">//! let sound_id = audio_manager.add_sound(Sound::from_file(&quot;loop.ogg&quot;, Default::default())?)?;</span>
-<span class="doccomment">//! audio_manager.play_sound(sound_id, Default::default())?;</span>
+<span class="doccomment">//! # let mut audio_manager = AudioManager::&lt;()&gt;::new(AudioManagerSettings::default())?;</span>
+<span class="doccomment">//! let sound_id = audio_manager.add_sound(Sound::from_file(&quot;loop.ogg&quot;, SoundSettings::default())?)?;</span>
+<span class="doccomment">//! audio_manager.play_sound(sound_id, InstanceSettings::default())?;</span>
 <span class="doccomment">//! # Ok::&lt;(), kira::KiraError&gt;(())</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
@@ -217,7 +217,7 @@
 <span class="doccomment">//! let mut sequence = Sequence::new();</span>
 <span class="doccomment">//! sequence.start_loop();</span>
 <span class="doccomment">//! sequence.wait_for_interval(4.0);</span>
-<span class="doccomment">//! sequence.play_sound(kick_drum_sound_id, Default::default());</span>
+<span class="doccomment">//! sequence.play_sound(kick_drum_sound_id, InstanceSettings::default());</span>
 <span class="doccomment">//! sequence.emit_custom_event(CustomEvent::KickDrum);</span>
 <span class="doccomment">//! audio_manager.start_sequence(sequence)?;</span>
 <span class="doccomment">//! // start the metronome so the sequence will have a pulse to listen for</span>
