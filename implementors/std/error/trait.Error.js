@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["kira"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/std/error/trait.Error.html\" title=\"trait std::error::Error\">Error</a> for <a class=\"enum\" href=\"kira/enum.KiraError.html\" title=\"enum kira::KiraError\">KiraError</a>","synthetic":false,"types":["kira::error::KiraError"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

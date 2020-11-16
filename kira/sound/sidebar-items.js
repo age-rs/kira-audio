@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Sound","A piece of audio that can be played by an `AudioManager`."],["SoundId","A unique identifier for a `Sound`."],["SoundMetadata","Useful info about a `Sound`."],["SoundSettings","Settings for a sound."]]});

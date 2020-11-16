@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["svf",""]],"struct":[["EffectId","A unique identifier for an `Effect`."],["EffectSettings","Settings for an effect."]],"trait":[["Effect",""]]});

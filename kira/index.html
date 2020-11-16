@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `kira` crate."><meta name="keywords" content="rust, rustlang, rust-lang, kira"><title>kira - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../kira/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><p class='location'>Crate kira</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all kira's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'kira', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/kira/lib.rs.html#1-124' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>kira</a></span></h1><div class='docblock'><h1 id="kira" class="section-header"><a href="#kira">Kira</a></h1>
+<p>Kira is an audio library designed to help create expressive audio
+for games. Besides the common features you'd expect from an audio
+library, it provides an interface for scripting audio events to
+happen at certain times, like the tick of a metronome.</p>
+<h2 id="usage" class="section-header"><a href="#usage">Usage</a></h2>
+<p>To use Kira, first create an <code>AudioManager</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">audio_manager</span> <span class="op">=</span> <span class="ident">AudioManager</span>::<span class="op">&lt;</span>()<span class="op">&gt;</span>::<span class="ident">new</span>(<span class="ident">Default</span>::<span class="ident">default</span>())<span class="question-mark">?</span>;</pre></div>
+<p>All audio-related actions go through the <code>AudioManager</code>.</p>
+<h3 id="loading-and-playing-a-sound" class="section-header"><a href="#loading-and-playing-a-sound">Loading and playing a sound</a></h3>
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">let</span> <span class="ident">sound_id</span> <span class="op">=</span> <span class="ident">audio_manager</span>.<span class="ident">add_sound</span>(<span class="ident">Sound</span>::<span class="ident">from_file</span>(<span class="string">&quot;loop.ogg&quot;</span>, <span class="ident">Default</span>::<span class="ident">default</span>())<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+<span class="ident">audio_manager</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">Default</span>::<span class="ident">default</span>())<span class="question-mark">?</span>;</pre></div>
+<h3 id="looping-a-piece-of-music" class="section-header"><a href="#looping-a-piece-of-music">Looping a piece of music</a></h3>
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">let</span> <span class="ident">sound_id</span> <span class="op">=</span> <span class="ident">audio_manager</span>.<span class="ident">add_sound</span>(<span class="ident">Sound</span>::<span class="ident">from_file</span>(
+	<span class="string">&quot;loop.ogg&quot;</span>,
+	<span class="ident">SoundSettings</span> {
+		<span class="ident">metadata</span>: <span class="ident">SoundMetadata</span> {
+			<span class="ident">semantic_duration</span>: <span class="prelude-val">Some</span>(<span class="ident">Tempo</span>(<span class="number">128.0</span>).<span class="ident">beats_to_seconds</span>(<span class="number">16.0</span>)),
+		},
+		..<span class="ident">Default</span>::<span class="ident">default</span>()
+	},
+)<span class="question-mark">?</span>)<span class="question-mark">?</span>;
+<span class="comment">// when the sound loops, start the loop 4 beats in</span>
+<span class="kw">let</span> <span class="ident">loop_start</span> <span class="op">=</span> <span class="ident">Tempo</span>(<span class="number">128.0</span>).<span class="ident">beats_to_seconds</span>(<span class="number">4.0</span>);
+<span class="ident">audio_manager</span>.<span class="ident">play_sound</span>(<span class="ident">sound_id</span>, <span class="ident">InstanceSettings</span>::<span class="ident">new</span>().<span class="ident">loop_region</span>(<span class="ident">loop_start</span>..))<span class="question-mark">?</span>;</pre></div>
+<h3 id="scripting-audio-sequences" class="section-header"><a href="#scripting-audio-sequences">Scripting audio sequences</a></h3>
+<p>This example will play a kick drum sound every 4 beats and emit an event
+each time:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sequence</span> <span class="op">=</span> <span class="ident">Sequence</span>::<span class="ident">new</span>();
+<span class="ident">sequence</span>.<span class="ident">start_loop</span>();
+<span class="ident">sequence</span>.<span class="ident">wait_for_interval</span>(<span class="number">4.0</span>);
+<span class="ident">sequence</span>.<span class="ident">play_sound</span>(<span class="ident">kick_drum_sound_id</span>, <span class="ident">Default</span>::<span class="ident">default</span>());
+<span class="ident">sequence</span>.<span class="ident">emit_custom_event</span>(<span class="ident">CustomEvent</span>::<span class="ident">KickDrum</span>);
+<span class="ident">audio_manager</span>.<span class="ident">start_sequence</span>(<span class="ident">sequence</span>)<span class="question-mark">?</span>;
+<span class="comment">// start the metronome so the sequence will have a pulse to listen for</span>
+<span class="ident">audio_manager</span>.<span class="ident">start_metronome</span>()<span class="question-mark">?</span>;</pre></div>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table><tr class='module-item'><td><a class="mod" href="instance/index.html" title='kira::instance mod'>instance</a></td><td class='docblock-short'><p>Provides an interface to control &quot;instances&quot;, or individual occurrences, of a sound.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="manager/index.html" title='kira::manager mod'>manager</a></td><td class='docblock-short'><p>Provides a bridge between the main thread and the audio thread.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="mixer/index.html" title='kira::mixer mod'>mixer</a></td><td class='docblock-short'><p>Provides an interface for organizing and applying effects to sounds.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="parameter/index.html" title='kira::parameter mod'>parameter</a></td><td class='docblock-short'><p>Provides an interface for smoothly changing values over time.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="sequence/index.html" title='kira::sequence mod'>sequence</a></td><td class='docblock-short'><p>Provides an interface to script timed audio events.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="sound/index.html" title='kira::sound mod'>sound</a></td><td class='docblock-short'><p>Provides an interface to work with pieces of audio.</p>
+</td></tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.MetronomeSettings.html" title='kira::MetronomeSettings struct'>MetronomeSettings</a></td><td class='docblock-short'><p>Settings for the metronome.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.StereoSample.html" title='kira::StereoSample struct'>StereoSample</a></td><td class='docblock-short'><p>Represents an audio sample with a left and right channel.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.Tempo.html" title='kira::Tempo struct'>Tempo</a></td><td class='docblock-short'><p>Represents a tempo, or speed, of some music (in beats per minute).</p>
+</td></tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table><tr class='module-item'><td><a class="enum" href="enum.Duration.html" title='kira::Duration enum'>Duration</a></td><td class='docblock-short'><p>Represents a duration of time.</p>
+</td></tr><tr class='module-item'><td><a class="enum" href="enum.Event.html" title='kira::Event enum'>Event</a></td><td class='docblock-short'><p>An audio-related event that can be observed on the main thread.</p>
+</td></tr><tr class='module-item'><td><a class="enum" href="enum.KiraError.html" title='kira::KiraError enum'>KiraError</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="enum" href="enum.Value.html" title='kira::Value enum'>Value</a></td><td class='docblock-short'><p>A number that something can be set to.</p>
+</td></tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table><tr class='module-item'><td><a class="type" href="type.KiraResult.html" title='kira::KiraResult type'>KiraResult</a></td><td class='docblock-short'></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "kira";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

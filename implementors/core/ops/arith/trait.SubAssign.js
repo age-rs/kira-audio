@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["kira"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/arith/trait.SubAssign.html\" title=\"trait core::ops::arith::SubAssign\">SubAssign</a>&lt;<a class=\"struct\" href=\"kira/struct.StereoSample.html\" title=\"struct kira::StereoSample\">StereoSample</a>&gt; for <a class=\"struct\" href=\"kira/struct.StereoSample.html\" title=\"struct kira::StereoSample\">StereoSample</a>","synthetic":false,"types":["kira::stereo_sample::StereoSample"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

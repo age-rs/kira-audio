@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["StateVariableFilterMode",""]],"struct":[["StateVariableFilter",""],["StateVariableFilterSettings",""]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Sequence","A series of audio-related actions to take at specific times."],["SequenceId","A unique identifier for a `Sequence`."]]});
