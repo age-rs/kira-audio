@@ -125,14 +125,13 @@ The Kira crate has the following feature flags:
   users should leave this enabled.
 - `symphonia` (enabled by default) - allows loading and streaming audio from common
   audio formats, like MP3 and WAV.
-	- `mp3` (enabled by default) - enables support for loading and streaming MP3 audio (enables
-		the `symphonia` feature automatically)
-	- `ogg` (enabled by default) - enables support for loading and streaming OGG audio (enables
-		the `symphonia` feature automatically)
-	- `flac` (enabled by default) - enables support for loading and streaming FLAC audio (enables
-		the `symphonia` feature automatically)
-	- `wav` (enabled by default) - enables support for loading and streaming WAV audio (enables
-		the `symphonia` feature automatically)
+	- Audio formats: `aiff`, `caf`, `isomp4`, `mkv`, `ogg`, `wav` - these correspond to the
+	  Symphonia features of the same name
+	- Audio codecs: `aac`, `adpcm`, `alac`, `he-aac`, `he-aac-v2`, `flac`, `mp1`, `mp2`, `mp3`,
+	  `mpa`, `opus', `pcm`, `vorbis`, `wavpack` - these correspond to the Symphonia features
+	  of the same name
+	- `mp3`, `ogg`, `vorbis`, `flac`, `wav`, and `pcm` are enabled by default.
+	- [See Symphonia's documentation for more information about these flags.](https://github.com/pdeljanov/Symphonia?tab=readme-ov-file#formats-demuxers)
 - `serde` - adds `Serialize` and `Deserialize` implementations for the following types:
 	- [`Capacities`]
 	- [`ClockSpeed`](crate::clock::ClockSpeed)
@@ -152,21 +151,6 @@ The Kira crate has the following feature flags:
 - `assert_no_alloc` - uses the [`assert_no_alloc`](https://crates.io/crates/assert_no_alloc) crate
   to cause panics if memory is allocated or deallocated on the audio thread. This is mainly useful
   for people developing Kira itself.
-
-## Loading other audio file formats
-
-Kira will be able to load any audio format that Symphonia supports with its
-current enabled features. For example, to add support for AAC files, you can
-add `symphonia` to your Cargo.toml with the `aac` feature:
-
-```toml
-symphonia = { version = "0.5.2", features = ["aac"] }
-```
-
-Kira's `mp3`, `ogg`, `flac`, and `wav` feature flags are provided for convenience.
-
-See the [symphonia documentation](https://github.com/pdeljanov/Symphonia#formats-demuxers)
-for a list of supported container formats and codecs.
 
 ## Performance using the `dev` profile
 
