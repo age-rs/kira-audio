@@ -1,3 +1,19 @@
+# v0.12.0 - February 18, 2026
+
+Breaking changes:
+
+- Updated the feature flags for file formats to be 1-to-1 with Symphonia's feature flags.
+  - If you were using the `ogg` feature previously, you'll want to add `vorbis` as well.
+  - If you were using the `wav` feature previously, you'll want to add `pcm` as well.
+  - If you were using the default features, you don't need to change anything.
+
+Other changes:
+
+- Update `cpal` to 0.17
+- Update `glam` to 0.32
+- Update `pastey` to 0.2
+- Fix a slight inaccuracy in the docs
+
 # v0.11.0 - November 4, 2025
 
 Breaking changes:
