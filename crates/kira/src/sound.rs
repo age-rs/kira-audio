@@ -199,6 +199,6 @@ pub enum EndPosition {
 	/// The end of the audio data.
 	#[default]
 	EndOfAudio,
-	/// A user-defined time in seconds.
+	/// A user-defined time.
 	Custom(PlaybackPosition),
 }
